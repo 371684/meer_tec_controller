@@ -32,17 +32,35 @@ class Monitoring():
         self.influxdb_client = InfluxDBClient(
             url=f"{influxdb_conf['host']}:{influxdb_conf['port']}", token=influxdb_conf["token"], org=influxdb_conf["org"]
         )
+        self.has_influx = True
         self.influxdb_org: str = influxdb_conf["org"]
         self.influxdb_bucket: str = influxdb_conf["bucket"]
-        self.write_api = self.influxdb_client.write_api(write_options=SYNCHRONOUS)
+        self.device: str = influxdb_conf['device']
+        self.influx_write_api = self.influxdb_client.write_api(write_options=SYNCHRONOUS)
 
     def read_temp(self):
         self.temp_read = self.tec1.object_temperature_ch1
         return self.temp_read
+    
+    def read_curr(self):
+        self.curr_read = self.tec1.actual_output_current_ch1
+        return self.curr_read
 
 if __name__  == "__main__":
-
+    do_monitor = True
     monitoring = Monitoring()
+    while do_monitor:
+        if monitoring.has_influx:
+            # Read temp and current from TEC
+            temp = monitoring.read_temp()
+            curr = monitoring.read_curr()
+            utc_t_now = datetime.utcnow()
+
+            # Push data to influxdb and then to Grafana
+            temp_val = Point('Temperature Measure').tag('Device', monitoring.device).field('Temperature', temp).time(utc_t_now, WritePrecision.MS)
+            curr_val = Point('Current Measure').tag('Device', monitoring.device).field('Current', curr).time(utc_t_now, WritePrecision.MS)
+            monitoring.influx_write_api.write(monitoring.influxdb_bucket, monitoring.influxdb_org, temp_val)
+            monitoring.influx_write_api.write(monitoring.influxdb_bucket, monitoring.influxdb_org, curr_val)
     # temp = []
 
     # tec.coarse_temp_ramp_ch1 = 0.02
