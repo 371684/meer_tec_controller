@@ -8,7 +8,7 @@ from influxdb_client import InfluxDBClient, Point
 from influxdb_client.client.write_api import SYNCHRONOUS
 from influxdb_client.domain.write_precision import WritePrecision
 
-import datetime
+from datetime import datetime
 import time
 
 class Monitoring():
@@ -45,6 +45,14 @@ class Monitoring():
     def read_curr(self):
         self.curr_read = self.tec1.actual_output_current_ch1
         return self.curr_read
+    
+    def read_settemp(self):
+        self.settemp_read = self.tec1.target_object_temperature
+        return self.settemp_read
+    
+    def read_voltage(self):
+        self.voltage_read = self.tec1.actual_output_voltage_ch1
+        return self.voltage_read
 
 if __name__  == "__main__":
     do_monitor = True
@@ -53,23 +61,28 @@ if __name__  == "__main__":
         if monitoring.has_influx:
             # Read temp and current from TEC
             temp = monitoring.read_temp()
+            time.sleep(0.5)
+
             curr = monitoring.read_curr()
+            time.sleep(0.5)
+
+            set_temp = monitoring.read_settemp()
+            time.sleep(0.5)
+
+            volt = monitoring.read_voltage()
+            time.sleep(0.5)
+
             utc_t_now = datetime.utcnow()
 
             # Push data to influxdb and then to Grafana
-            temp_val = Point('Temperature Measure').tag('Device', monitoring.device).field('Temperature', temp).time(utc_t_now, WritePrecision.MS)
-            curr_val = Point('Current Measure').tag('Device', monitoring.device).field('Current', curr).time(utc_t_now, WritePrecision.MS)
+            temp_val = Point('UV_Cavity_TEC').tag('name', monitoring.device).field('Temperature', temp).time(utc_t_now, WritePrecision.MS)
+            curr_val = Point('UV_Cavity_TEC').tag('name', monitoring.device).field('Current', curr).time(utc_t_now, WritePrecision.MS)
+            set_val = Point('UV_Cavity_TEC').tag('name', monitoring.device).field('set_temperature', set_temp).time(utc_t_now, WritePrecision.MS)
+            volt_val = Point('UV_Cavity_TEC').tag('name', monitoring.device).field('voltage', volt).time(utc_t_now, WritePrecision.MS)
+
             monitoring.influx_write_api.write(monitoring.influxdb_bucket, monitoring.influxdb_org, temp_val)
             monitoring.influx_write_api.write(monitoring.influxdb_bucket, monitoring.influxdb_org, curr_val)
-    # temp = []
+            monitoring.influx_write_api.write(monitoring.influxdb_bucket, monitoring.influxdb_org, set_val)
+            monitoring.influx_write_api.write(monitoring.influxdb_bucket, monitoring.influxdb_org, volt_val)
+            time.sleep(10)
 
-    # tec.coarse_temp_ramp_ch1 = 0.02
-
-    # tec.target_object_temperature = 24
-
-    # for i in range(10):
-    #     tec.target_object_temperature = 24+0.3*i
-    #     temp.append(tec.object_temperature_ch1)
-    #     time.sleep(0.5)
-
-    # print(temp)

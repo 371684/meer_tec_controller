@@ -1,0 +1,28 @@
+name: UVcavity
+channels:
+  - defaults
+dependencies:
+  - ca-certificates=2023.08.22=haa95532_0
+  - openssl=3.0.11=h2bbff1b_2
+  - pip=23.3=py39haa95532_0
+  - python=3.9.18=h1aa4202_0
+  - setuptools=68.0.0=py39haa95532_0
+  - sqlite=3.41.2=h2bbff1b_0
+  - tzdata=2023c=h04d1e81_0
+  - vc=14.2=h21ff451_1
+  - vs2015_runtime=14.27.29016=h5e58377_2
+  - wheel=0.41.2=py39haa95532_0
+  - pip:
+    - certifi==2023.7.22
+    - h5py==3.10.0
+    - influxdb-client==1.38.0
+    - mecom==0.1
+    - meer-tec==0.1.0
+    - numpy==1.26.1
+    - pyserial==3.5
+    - python-dateutil==2.8.2
+    - pythoncrc==1.21
+    - reactivex==4.0.4
+    - six==1.16.0
+    - typing-extensions==4.8.0
+    - urllib3==2.0.7
