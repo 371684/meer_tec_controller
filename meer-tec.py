@@ -90,7 +90,7 @@ if __name__  == "__main__":
             set_val = Point('UV_Cavity_TEC').tag('name', monitoring.device).field('set_temperature', set_temp).time(utc_t_now, WritePrecision.MS)
             volt_val = Point('UV_Cavity_TEC').tag('name', monitoring.device).field('voltage', volt).time(utc_t_now, WritePrecision.MS)
             flow_val = Point('UV_Cavity_TEC').tag('name', 'flow_controller').field('flow', flow).time(utc_t_now, WritePrecision.MS)
-            flow_set_val = Point('UV_Cavity_TEC').tag('name', 'flow_controller').field('flow', set_flow).time(utc_t_now, WritePrecision.MS)
+            flow_set_val = Point('UV_Cavity_TEC').tag('name', 'flow_controller').field('set_flow', set_flow).time(utc_t_now, WritePrecision.MS)
 
             monitoring.influx_write_api.write(monitoring.influxdb_bucket, monitoring.influxdb_org, temp_val)
             monitoring.influx_write_api.write(monitoring.influxdb_bucket, monitoring.influxdb_org, curr_val)

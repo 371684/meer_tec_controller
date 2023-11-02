@@ -50,7 +50,7 @@ class flow_con ():
 
 if __name__  == "__main__":
     floward = flow_con()
-    flow_val = floward.readflow()
+    flow_val = floward.read_flow()
     print('the current flow rate is :' + str(flow_val) + ' sccm' )
     set_val = floward.read_set()
     print('the set flow rate is :' + str(set_val) + ' sccm' )
