@@ -25,9 +25,23 @@ class Monitoring():
         
 
     def load_TEC(self):
+<<<<<<< HEAD
         self.TEC_COM = self.config['USB']['COM1']
         self.usb = USB(self.TEC_COM)
         self.tec1 = TEC(self.usb , 0)
+=======
+        self.TEC_COM1 = self.config['USB']['COM1']
+        self.usb1 = USB(self.TEC_COM1)
+        self.tec1 = TEC(self.usb1 , 0)
+
+        # self.TEC_COM2 = self.config['USB']['COM2']
+        # self.usb2 = USB(self.TEC_COM2)
+        # self.tec2 = TEC(self.usb2 , 0)
+
+        # self.TEC_COM3 = self.config['USB']['COM3']
+        # self.usb3 = USB(self.TEC_COM3)
+        # self.tec3 = TEC(self.usb3 , 0)
+>>>>>>> fcf75c88c6ff31a7bbcab5eb00c81c344bc123b1
     
     def setup_influx(self):
         influxdb_conf = self.config["influxdb"] 
@@ -37,7 +51,11 @@ class Monitoring():
         self.has_influx = True
         self.influxdb_org: str = influxdb_conf["org"]
         self.influxdb_bucket: str = influxdb_conf["bucket"]
+<<<<<<< HEAD
         self.device: str = influxdb_conf['device1']
+=======
+        self.device1: str = influxdb_conf['device1']
+>>>>>>> fcf75c88c6ff31a7bbcab5eb00c81c344bc123b1
         self.influx_write_api = self.influxdb_client.write_api(write_options=SYNCHRONOUS)
 
     def read_temp(self):
@@ -85,10 +103,10 @@ if __name__  == "__main__":
             utc_t_now = datetime.utcnow()
 
             # Push data to influxdb and then to Grafana
-            temp_val = Point('UV_Cavity_TEC').tag('name', monitoring.device).field('Temperature', temp).time(utc_t_now, WritePrecision.MS)
-            curr_val = Point('UV_Cavity_TEC').tag('name', monitoring.device).field('Current', curr).time(utc_t_now, WritePrecision.MS)
-            set_val = Point('UV_Cavity_TEC').tag('name', monitoring.device).field('set_temperature', set_temp).time(utc_t_now, WritePrecision.MS)
-            volt_val = Point('UV_Cavity_TEC').tag('name', monitoring.device).field('voltage', volt).time(utc_t_now, WritePrecision.MS)
+            temp_val = Point('UV_Cavity_TEC').tag('name', monitoring.device1).field('Temperature', temp).time(utc_t_now, WritePrecision.MS)
+            curr_val = Point('UV_Cavity_TEC').tag('name', monitoring.device1).field('Current', curr).time(utc_t_now, WritePrecision.MS)
+            set_val = Point('UV_Cavity_TEC').tag('name', monitoring.device1).field('set_temperature', set_temp).time(utc_t_now, WritePrecision.MS)
+            volt_val = Point('UV_Cavity_TEC').tag('name', monitoring.device1).field('voltage', volt).time(utc_t_now, WritePrecision.MS)
             flow_val = Point('UV_Cavity_TEC').tag('name', 'flow_controller').field('flow', flow).time(utc_t_now, WritePrecision.MS)
             flow_set_val = Point('UV_Cavity_TEC').tag('name', 'flow_controller').field('set_flow', set_flow).time(utc_t_now, WritePrecision.MS)
 
