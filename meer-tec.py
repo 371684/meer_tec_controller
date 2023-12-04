@@ -25,7 +25,7 @@ class Monitoring():
         
 
     def load_TEC(self):
-        self.TEC_COM = self.config['USB']['COM']
+        self.TEC_COM = self.config['USB']['COM1']
         self.usb = USB(self.TEC_COM)
         self.tec1 = TEC(self.usb , 0)
     
@@ -37,7 +37,7 @@ class Monitoring():
         self.has_influx = True
         self.influxdb_org: str = influxdb_conf["org"]
         self.influxdb_bucket: str = influxdb_conf["bucket"]
-        self.device: str = influxdb_conf['device']
+        self.device: str = influxdb_conf['device1']
         self.influx_write_api = self.influxdb_client.write_api(write_options=SYNCHRONOUS)
 
     def read_temp(self):
